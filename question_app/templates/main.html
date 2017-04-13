@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block main %}
+    <h1 class="title">{{ title }}</h1>
+
+    {% if questions %}
+        <ul class="result_vote">
+            {% for question in questions %}
+            <li><a href="{% url 'votes'  question.id %} " class="mainH" >{{ question.question }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h3 class="title">Нет опросов</h3>
+        <a href="/admin/question_app/question/add/">Создать опрос?</a>
+    {% endif %}
+{% endblock %}

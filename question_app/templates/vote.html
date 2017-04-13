@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+{% block detail %}
+    {{ poll }}
+    <span class="error">{{ error }}</span>
+{% endblock %}
+{% block main %}
+    <h1 class="title">{{ title }}</h1>
+
+    <form action="done/{{ question.id }}" method="post">
+        {% csrf_token %}
+        <span class="title">{{ question.question }}</span>
+        {% if question.answer_type.type == 'select' %}
+            <select name="choice" id="choise{{ question.id }}">
+                {% for ans in answer%}
+                    <option value="{{ ans.id }}">{{ ans.answer }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        {% if question.answer_type.type == 'multiselect' %}
+            <select name="choice" size=3 multiple id="choise{{ question.id }}">
+                {% for ans in answer%}
+                    <option value="{{ ans.id }}">{{ ans.answer }}</option>
+                {% endfor %}
+            </select>
+        {% endif %}
+        {% if question.answer_type.type == 'radio' %}
+            {% for ans in answer %}
+                <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ ans.id }}" />
+                <label for="choice{{ forloop.counter }}">{{ ans.answer }}</label><br />
+            {% endfor %}
+        {% endif %}
+        {% if question.answer_type.type == 'checkbox' %}
+            {% for ans in answer %}
+                <input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ ans.id }}" />
+                <label for="choice{{ forloop.counter }}">{{ ans.answer }}</label><br />
+            {% endfor %}
+        {% endif %}
+
+
+        <input type="submit" name="create" value="Готово">
+    </form>
+{% endblock %}

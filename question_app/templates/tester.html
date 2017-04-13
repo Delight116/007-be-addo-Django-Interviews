@@ -1,0 +1,65 @@
+{% extends "index.html" %}
+
+{% block main %}
+    <h1 class="title">{{ title }}</h1>
+    {% if groups %}
+        <ul class="result_vote">
+            {% for group in groups %}
+            <li><a href="{% url 'tester'  group.id %} " class="mainH" >{{ group.interview }}</a></li>
+            {% endfor %}
+        </ul>
+    {% elif question %}
+        <form action="{% url 'dones' %}" method="POST">
+        {% csrf_token %}
+            <input type="hidden" name="interview" value="{{ interview }}">
+
+        {% for quest in question %}
+            <h3 class="title">{{ quest.question }}</h3>
+            <input type="hidden" name="quest" value="{{ quest.id }}">
+
+            {% if quest.answer_type.type == 'select' %}
+                <select name="choice" id="choise{{ quest.id }}">
+                    {% for ans in answers %}
+                        {% if ans.question == quest %}
+                            <option value="{{ ans.id }}">{{ ans.answer }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            {% elif quest.answer_type.type == 'multiselect' %}
+                <select name="choice" size=3 multiple id="choise{{ quest.id }}">
+                    {% for ans in answers %}
+                        {% if ans.question == quest %}
+                            <option value="{{ ans.id }}">{{ ans.answer }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            {% elif quest.answer_type.type == 'radio' %}
+                {% for ans in answers%}
+                    {% if ans.question == quest %}
+                        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ ans.id }}" />
+                        <label for="choice{{ forloop.counter }}">{{ ans.answer }}</label>
+                    {% endif %}
+
+                {% endfor %}
+            {% elif quest.answer_type.type == 'checkbox' %}
+
+                {% for ans in answers %}
+                    {% if ans.question == quest %}
+                        <input type="checkbox" name="choice" id="choice{{ forloop.counter }}" value="{{ ans.id }}" />
+                        <label for="choice{{ forloop.counter }}">{{ ans.answer }}</label>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        <input type="submit" name="create" value="Готово">
+    </form>
+    {% else %}
+        <ul class="result_vote">
+            <h3 class="title">Нет вопросов</h3>
+
+            <li class="controls"><a href="/admin/question_app/question/add/" class="btn btn-primary" >Создать вопрос?</a></li>
+        </ul>
+    {% endif %}
+
+
+{% endblock %}

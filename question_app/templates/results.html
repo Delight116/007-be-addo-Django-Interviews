@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% block main %}
+    <h1 class="title">{{ title }}</h1>
+    <ul class="result_vote">
+    {% if group %}
+
+    {% for quest in questions %}
+        <h3 class="title">{{ quest.question }}</h3>
+        {% for ans in answer %}
+            {% if ans.question == quest %}
+            <li><span class="description">{{ ans.answer}} </span> <span class="separator"> -- </span> <span class="result"> <strong>{{ ans.votes }} </strong> vote{{ ans.votes|pluralize }}</span></li>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+    {% else %}
+        <li>Никто не проходил тесты !!!</li>
+    {% endif %}
+    </ul>
+
+{% endblock %}

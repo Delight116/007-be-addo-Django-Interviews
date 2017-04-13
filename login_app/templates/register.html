@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+
+{% block auth %}
+    <h1 class="title">Registration</h1>
+<form action="{% url 'registration' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Регистрация" class="button">
+</form>
+{% endblock%}
